@@ -1,6 +1,5 @@
-import pygame
+import pygame 
 import random
-from os import path
 
 pygame.init()
 pygame.mixer.init()
@@ -9,7 +8,8 @@ WIDTH = 800
 HEIGHT = 600
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("DinoEvolutio")
+pygame.display.set_caption("DinoEvolution")
+
 
 IMG_DIR = path.join(path.dirname(__file__), "imagens")
 
