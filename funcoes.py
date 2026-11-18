@@ -11,10 +11,6 @@ window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DinoEvolution")
 
 
-IMG_DIR = path.join(path.dirname(__file__), "imagens")
-
-SND_DIR = path.join(path.dirname(__file__), "sons")
-
 FPS = 60
 
 MAX_DINOS = 20
@@ -117,4 +113,27 @@ def dinheiro(n):
     elif n >= 1000:
         return str(int(n / 1000)) + "k"
     return str(int(n))
-#lucas viado
+def montar_info():
+    """Organiza os vinte niveis; carrega e dimensiona cada imagem uma vez."""
+    info = {}
+    for n in range(1, NIVEL_MAXIMO + 1):
+        nome, arquivo, escala = BASE[n - 1]
+        imagem = pygame.image.load(path.join(IMG_DIR, arquivo)).convert()
+        # EXTRA AUTORIZADO: remove o preto do JPEG antes de redimensionar, usamos auxilio da IA 
+        imagem.set_colorkey((0, 0, 0))
+        tamanho = imagem.get_rect()
+        # right e bottom de um get_rect() novo correspondem ao tamanho.
+        # A proporcao original do JPEG e preservada.
+        largura = int(86 * escala)
+        altura = int(largura * tamanho.bottom / tamanho.right)
+        mini_altura = int(54 * tamanho.bottom / tamanho.right)
+        info[n] = {
+            "nome": nome,
+            "imagem": pygame.transform.scale(imagem, (largura, altura)),
+            "mini": pygame.transform.scale(imagem, (54, mini_altura)),
+            "escala": escala,
+        }
+        if n == NIVEL_MAXIMO:
+            altura_vitoria = int(270 * tamanho.bottom / tamanho.right)
+            info[n]["vitoria"] = pygame.transform.scale(imagem, (270, altura_vitoria))
+    return info
