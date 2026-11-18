@@ -117,3 +117,4 @@ def dinheiro(n):
     elif n >= 1000:
         return str(int(n / 1000)) + "k"
     return str(int(n))
+#lucas viado
