@@ -4,5 +4,10 @@ import random
 pygame.init()
 pygame.mixer.init()
 
-WIDTH =
-HEIGHT = 
+WIDTH = 800
+HEIGHT = 600
+
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("DinoEvolutio")
+
+FPS = 60
