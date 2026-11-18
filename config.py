@@ -52,6 +52,7 @@ Y_MIN, Y_MAX = 310, HEIGHT - 60
 
 FUNDO = "fundo-floresta.jpeg"
 MUSICA = "dinosaur_extinction_old_classical_music_by_kris_klavenes_ending_soundtrack_05.02.2021.mp3"
+METEORO = "Meteoro.png"
 
 # o que vamos usar na roleta 
 PREMIOS = [("renda", 30), ("caixa", 0), ("renda", 60), ("caixa", 1),
