@@ -1,5 +1,7 @@
 import pygame 
 import random
+from config import *
+from assets import *
 
 pygame.init()
 pygame.mixer.init()
@@ -10,6 +12,10 @@ HEIGHT = 600
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DinoEvolution")
 
+
+IMG_DIR = path.join(path.dirname(__file__), "imagens")
+
+SND_DIR = path.join(path.dirname(__file__), "sons")
 
 FPS = 60
 
@@ -89,11 +95,12 @@ CINZA = (172, 192, 181)
 
 VERMELHO = (255, 140, 121)
 
-# ==================== FUNCOES AUXILIARES ====================
+# Calcula o valor de um ovo: 1, 2, 4, 8... 20 conforme o nivel do dino.
 def valor_ovo(n):
-    """Calcula o valor de um ovo: 1, 2, 4, 8... conforme o nivel do dino."""
-    return 2 ** (n - 1)
+    a = 2 ** (n - 1)
+    return a
 
+# Mantem o preco do grupo; o nivel 1 usa a posicao zero da lista."""
 def preco_dino(n, lista_de_dinossauro):
     """Mantem o preco do grupo; o nivel 1 usa a posicao zero da lista."""
     return 10 * valor_ovo(n) + 30 * lista_de_dinossauro[n - 1]
@@ -113,27 +120,4 @@ def dinheiro(n):
     elif n >= 1000:
         return str(int(n / 1000)) + "k"
     return str(int(n))
-def montar_info():
-    """Organiza os vinte niveis; carrega e dimensiona cada imagem uma vez."""
-    info = {}
-    for n in range(1, NIVEL_MAXIMO + 1):
-        nome, arquivo, escala = BASE[n - 1]
-        imagem = pygame.image.load(path.join(IMG_DIR, arquivo)).convert()
-        # EXTRA AUTORIZADO: remove o preto do JPEG antes de redimensionar, usamos auxilio da IA 
-        imagem.set_colorkey((0, 0, 0))
-        tamanho = imagem.get_rect()
-        # right e bottom de um get_rect() novo correspondem ao tamanho.
-        # A proporcao original do JPEG e preservada.
-        largura = int(86 * escala)
-        altura = int(largura * tamanho.bottom / tamanho.right)
-        mini_altura = int(54 * tamanho.bottom / tamanho.right)
-        info[n] = {
-            "nome": nome,
-            "imagem": pygame.transform.scale(imagem, (largura, altura)),
-            "mini": pygame.transform.scale(imagem, (54, mini_altura)),
-            "escala": escala,
-        }
-        if n == NIVEL_MAXIMO:
-            altura_vitoria = int(270 * tamanho.bottom / tamanho.right)
-            info[n]["vitoria"] = pygame.transform.scale(imagem, (270, altura_vitoria))
-    return info
+#lucas viado
