@@ -56,6 +56,20 @@ def distancia_dos_pontos(x1 , y1, x2, y2):
     dis = ((x1 - x2 )**2 + (y1 - y2)**2) ** 0.5
     return dis
 
+# Ordena os dinos pela base (rect.bottom) para dar nocao de profundidade.Essa função organiza os dinossauros pela posição da parte de baixo deles na tela (rect.bottom). Ela compara os dinossauros vizinhos e troca a ordem quando necessário. Assim, ao desenhar seguindo essa lista, os que estão mais embaixo aparecem na frente dos que estão mais acima, criando uma sensação de profundidade.
+def ordenar_dinos(itens):
+    lista = itens_do_jogo(itens)
+    for i in range(len(lista)):
+        for j in range(len(lista) - 1 - i):
+            if lista[j].rect.bottom > lista[j + 1].rect.bottom:
+                lista[j], lista[j + 1] = lista[j + 1], lista[j]
+    return lista
+
+
+#Evita ultrapassar vinte dinos e entregas somados.
+def tem_espaco(self):
+        return self.ocupados() < MAX_DINOS
+
 
 
 
