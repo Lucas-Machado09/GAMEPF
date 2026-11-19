@@ -15,9 +15,9 @@ def valor_ovo(n):
     a = 2 ** (n - 1)
     return a
 
-# Mantem o preco do grupo; o nivel 1 usa a posicao zero da lista."""
+# Mantem o preco do grupo; o nivel 1 usa a posicao zero da lista.
 def preco_dino(n, lista_de_dinossauro):
-    #Mantem o preco do grupo; o nivel 1 usa a posicao zero da lista.
+    
     return 10 * valor_ovo(n) + 30 * lista_de_dinossauro[n - 1]
 
 def compra_dino(n, lista_de_dinossauro):
@@ -35,27 +35,29 @@ def dinheiro(n):
     elif n >= 1000:
         return str(int(n / 1000)) + "k"
     return str(int(n))
-def montar_info():
-    #Organiza os vinte niveis; carrega e dimensiona cada imagem uma vez.
-    info = {}
-    for n in range(1, NIVEL_MAXIMO + 1):
-        nome, arquivo, escala = BASE[n - 1]
-        imagem = pygame.image.load(path.join(IMG_DIR, arquivo)).convert()
-        # EXTRA AUTORIZADO: remove o preto do JPEG antes de redimensionar. Tivemos auxilio de IA
-        imagem.set_colorkey((0, 0, 0))
-        tamanho = imagem.get_rect()
-        # right e bottom de um get_rect() novo correspondem ao tamanho.
-        # A proporcao original do JPEG e preservada.
-        largura = int(86 * escala)
-        altura = int(largura * tamanho.bottom / tamanho.right)
-        mini_altura = int(54 * tamanho.bottom / tamanho.right)
-        info[n] = {
-            "nome": nome,
-            "imagem": pygame.transform.scale(imagem, (largura, altura)),
-            "mini": pygame.transform.scale(imagem, (54, mini_altura)),
-            "escala": escala,
-        }
-        if n == NIVEL_MAXIMO:
-            altura_vitoria = int(270 * tamanho.bottom / tamanho.right)
-            info[n]["vitoria"] = pygame.transform.scale(imagem, (270, altura_vitoria))
-    return info
+
+def itens_do_jogo(itens):
+    lista = []
+    for item in itens:
+        lista.append(item)
+    return lista
+
+# ela verifica se o curso esta dentro da area
+def dentro(cursor, area):
+    x , y = cursor
+    ax, ay, largura , altura = area
+    if ax <= x <= ax + largura and ay <= y <= ay + altura:
+        return True
+    else:
+        return False
+
+# com ela verica se clicou em algo existente tipo: ovo, outro dino e asim por diante...
+def distancia_dos_pontos(x1 , y1, x2, y2):
+    dis = ((x1 - x2 )**2 + (y1 - y2)**2) ** 0.5
+    return dis
+
+
+
+
+    
+

@@ -47,16 +47,18 @@ QUAL_MAX = 12
 COOLDOWN_ROLETA = 120
 
 # retangulo do lugar onde os dinos vão andar
-X_MIN, X_MAX = 12, WIDTH - 12
-Y_MIN, Y_MAX = 310, HEIGHT - 60
+X_MIN = 12 
+X_MAX = WIDTH - 12
+Y_MIN = 310
+Y_MAX = HEIGHT - 60
 
 FUNDO = "fundo-floresta.jpeg"
 MUSICA = "dinosaur_extinction_old_classical_music_by_kris_klavenes_ending_soundtrack_05.02.2021.mp3"
 METEORO = "Meteoro.png"
+SOM_ENCAIXE = "encaixe.wav"
 
 # o que vamos usar na roleta 
-PREMIOS = [("renda", 30), ("caixa", 0), ("renda", 60), ("caixa", 1),
-           ("renda", 15), ("caixa", 0), ("renda", 120), ("caixa", 2)]
+PREMIOS = [("renda", 30), ("caixa", 0), ("renda", 60), ("caixa", 1), ("renda", 15), ("caixa", 0), ("renda", 120), ("caixa", 2)]
 ROTULOS = ["+30s", "Caixa", "+60s", "Caixa +1", "+15s", "Caixa", "+2min", "Caixa +2"]
 PESOS = [30, 20, 20, 8, 30, 20, 4, 2]
 
