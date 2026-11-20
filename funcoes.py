@@ -65,10 +65,27 @@ def ordenar_dinos(itens):
                 lista[j], lista[j + 1] = lista[j + 1], lista[j]
     return lista
 
-
 #Evita ultrapassar vinte dinos e entregas somados.
 def tem_espaco(self):
         return self.ocupados() < MAX_DINOS
+
+class Dino(pygame.sprite.Sprite):
+    # cria um dino no campo com um nivel, pos, e hora
+    def __init__(self, nivel, x , y,assets):
+        pygame.sprite.Sprite.__init__(self)
+        self.nivel = nivel
+        self.image = assets["dinos"][nivel]["imagem"]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x,y)
+        self.x = self.rect.x
+        self.y = self.rect.y
+        self.vx = 0
+        self.vy = 0
+        self.tempo_direcao = 0
+        self.tempo_ovo = random(OVO_MIN, OVO_MAX) * 1000
+        self.preso = False
+        self.escolher_direcao()
+
 
 
 
