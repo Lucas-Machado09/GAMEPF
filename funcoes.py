@@ -247,4 +247,18 @@ class Partida:
 
     def custo_entrega(self):  # Retorna o preco da proxima melhoria de velocidade de entrega.
         return int(120 * 3 ** self.ent_lvl)
+    def custo_qual(self):  # Retorna o preco da proxima melhoria de qualidade das caixas.
+        return int(60 * 2.5 ** self.qual)
+
+    def aparecer_dino(self, nivel, x, y):  # Cria um dinossauro no campo e atualiza o maior nivel alcancado.
+        dino = Dino(nivel, x, y, self.assets)
+        self.dinos.add(dino)
+        if nivel > self.maior:
+            self.maior = nivel
+        return dino
+
+    def posicao(self):  # Sorteia uma coordenada (x, y) valida dentro do gramado.
+        x = random.randint(X_MIN + 65, X_MAX - 65)
+        y = random.randint(Y_MIN + 45, Y_MAX - 45)
+        return x, y
     
