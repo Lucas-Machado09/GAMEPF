@@ -333,4 +333,34 @@ class Partida:
             self.venceu = True
             self.assets["vitoria"].play()
         return True
+     def coletar_ovo(self, ovo):  # Adiciona o valor do ovo as moedas e remove o ovo da tela.
+        if ovo not in self.ovos:
+            return False
+        self.moedas += ovo.valor
+        self.avisar("+" + dinheiro(ovo.valor) + " moedas")
+        ovo.kill()
+        self.assets["coletar"].play()
+        return True
+
+    def sortear_premio(self):  # Sorteia um premio da roleta respeitando os pesos definidos em config.py.
+        total = 0
+        for peso in PESOS:
+            total += peso
+        sorteio = random.randint(1, total)
+        acumulado = 0
+        for i in range(len(PESOS)):
+            acumulado += PESOS[i]
+            if sorteio <= acumulado:
+                return i
+
+    def girar(self):  # Inicia a animacao de giro da roleta se nao estiver em recarga.
+        if self.girando or self.roleta_cd > 0:
+            self.avisar("A roleta ainda esta em espera.")
+            return False
+        self.premio = self.sortear_premio()
+        self.girando = True
+        self.tempo_giro = 0
+        self.proxima_troca = 0
+        self.resultado = ""
+        return True
 
