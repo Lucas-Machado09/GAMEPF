@@ -431,42 +431,82 @@ class Partida:
                 if self.timer <= 0:
                     self.nova_caixa(self.qual)
                     self.timer = self.intervalo() * 1000
-    def _init_(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
-        self.assets = assets
-        self.partida = Partida(assets)
-        self.estado = "menu"
-        self.voltar_ajuda = "menu"
-        self.painel = ""
-        self.scroll = 0
-        self.mouse = (0, 0)
-        self.arrastado = 0
-        self.offset = (0, 0)
-        self.efeitos = []
-        self.confetes = []
-        self.passo_roda = 0
-        self.inicio_roda = 0
-        self.total_roda = 0
-        self.meteoro_x = 0
-        self.meteoro_y = 0
-        self.tempo_meteoro = 0
-        self.menu_dinos = []
-        for nivel in [1, 3, 5, 8, 12, 17]:
-            x = random.randint(90, WIDTH - 90)
-            y = random.randint(360, 490)
-            self.menu_dinos.append(Dino(nivel, x, y, assets))
+    
+# ==================== CONTROLE DE TELAS E MOUSE ====================
+class InterfaceMouse:
+    #Gerencia telas, cliques, arrasto de dinossauros e animacao do meteoro.
+        def _init_(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
+            self.assets = assets
+            self.partida = Partida(assets)
+            self.estado = "menu"
+            self.voltar_ajuda = "menu"
+            self.painel = ""
+            self.scroll = 0
+            self.mouse = (0, 0)
+            self.arrastado = 0
+            self.offset = (0, 0)
+            self.efeitos = []
+            self.confetes = []
+            self.passo_roda = 0
+            self.inicio_roda = 0
+            self.total_roda = 0
+            self.meteoro_x = 0
+            self.meteoro_y = 0
+            self.tempo_meteoro = 0
+            self.menu_dinos = []
+            for nivel in [1, 3, 5, 8, 12, 17]:
+                x = random.randint(90, WIDTH - 90)
+                y = random.randint(360, 490)
+                self.menu_dinos.append(Dino(nivel, x, y, assets))
 
-    def botao(self, tela, area, titulo, cor=(76, 155, 76), ativo=True, fonte="fonte"):  # Desenha um botao clicavel com efeito hover.
-        if not ativo:
-            cor = (142, 137, 115)
-        elif dentro(self.mouse, area):
-            nova_cor = []
-            for canal in cor:
-                canal += 20
-                if canal > 255:
-                    canal = 255
-                nova_cor.append(canal)
-            cor = nova_cor
-        placa(tela, area, cor)
-        x, y, largura, altura = area
-        escrever(tela, self.assets, titulo, x + largura / 2, y + altura / 2 - 1, fonte, centro=True)
+        def botao(self, tela, area, titulo, cor=(76, 155, 76), ativo=True, fonte="fonte"):  # Desenha um botao clicavel com efeito hover.
+            if not ativo:
+                cor = (142, 137, 115)
+            elif dentro(self.mouse, area):
+                nova_cor = []
+                for canal in cor:
+                    canal += 20
+                    if canal > 255:
+                        canal = 255
+                    nova_cor.append(canal)
+                cor = nova_cor
+            placa(tela, area, cor)
+            x, y, largura, altura = area
+            escrever(tela, self.assets, titulo, x + largura / 2, y + altura / 2 - 1, fonte, centro=True)
+
+        def iniciar(self):  # Comeca uma nova partida zerando os estados anteriores.
+            self.partida = Partida(self.assets)
+            self.estado = "jogo"
+            self.painel = ""
+            self.scroll = 0
+            self.arrastado = 0
+            self.efeitos = []
+            self.confetes = []
+            self.passo_roda = 0
+            self.tempo_meteoro = 0
+
+        def area_compra(self, linha):  # Calcula a area clicavel do botao Comprar de uma linha da loja.
+            return (569, 149 + linha * 57, 128, 34)
+
+        def mudar_scroll(self, passo):  # Move a rolagem da loja entre os 20 niveis disponiveis.
+            self.scroll += passo
+            if self.scroll < 0:
+                self.scroll = 0
+            if self.scroll > NIVEL_MAXIMO - 6:
+                self.scroll = NIVEL_MAXIMO - 6
+
+        def alvo(self, dino):  # Encontra um dinossauro do mesmo nivel proximo ao que esta sendo arrastado.
+            melhor = 0
+            menor = 999999
+            for outro in self.partida.dinos:
+                if outro != dino and outro.nivel == dino.nivel and dino.nivel < NIVEL_MAXIMO:
+                    distancia = calcular_distancia(dino.rect.centerx, dino.rect.centery,
+                                                outro.rect.centerx, outro.rect.centery)
+                    largura = dino.rect.right - dino.rect.left
+                    outra_largura = outro.rect.right - outro.rect.left
+                    alcance = int((largura + outra_largura) * 0.24) + 13
+                    if distancia < alcance and distancia < menor:
+                        melhor = outro
+                        menor = distancia
+            return melhor
 
