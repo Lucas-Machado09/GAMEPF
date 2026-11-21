@@ -120,6 +120,7 @@ def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos li
                 self.rect.bottom = Y_MAX
                 self.y = self.rect.y
                 self.vy = -self.vy
+                
 class Ovo(pygame.sprite.Sprite):
 #Um ovo coletavel, com valor ligado ao nivel e vida de doze segundos.
 
@@ -162,8 +163,6 @@ class Caixa(pygame.sprite.Sprite):
         else:
             self.espera -= dt
 
-   
 
 
-    
 
