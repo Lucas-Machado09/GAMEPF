@@ -120,7 +120,47 @@ def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos li
                 self.rect.bottom = Y_MAX
                 self.y = self.rect.y
                 self.vy = -self.vy
+class Ovo(pygame.sprite.Sprite):
+#Um ovo coletavel, com valor ligado ao nivel e vida de doze segundos.
 
+    def __init__(self, x, y, nivel, assets):  # Cria um ovo na posicao (x, y) com valor proporcional ao nivel.
+        pygame.sprite.Sprite.__init__(self)
+        self.image = assets["ovo"].render("O", True, (255, 240, 194))
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.valor = valor_ovo(nivel)
+        self.vida = VIDA_OVO * 1000
+
+    def update(self, dt):  # Desconta o tempo de vida do ovo e remove-o se passar de 12 segundos.
+        self.vida -= dt
+        if self.vida <= 0:
+            self.kill()
+
+
+class Caixa(pygame.sprite.Sprite):
+#Uma entrega que cai no campo e depois se transforma em um dinossauro.
+
+    def __init__(self, nivel, x, y, assets):  
+# Cria uma caixa acima da tela que vai cair ate o ponto (x, y).
+        pygame.sprite.Sprite.__init__(self)
+        self.image = assets["grande"].render("?", True, (255, 225, 144))
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, -30)
+        self.y = -30
+        self.y_alvo = y
+        self.nivel = nivel
+        self.espera = 700
+        self.estado = "caindo"
+
+    def update(self, dt):  # Anima a queda da caixa ate o chao e conta 0,7s antes de abrir.
+        if self.estado == "caindo":
+            self.y += 0.45 * dt
+            if self.y >= self.y_alvo:
+                self.y = self.y_alvo
+                self.estado = "parada"
+            self.rect.centery = int(self.y)
+        else:
+            self.espera -= dt
 
    
 
