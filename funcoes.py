@@ -431,4 +431,42 @@ class Partida:
                 if self.timer <= 0:
                     self.nova_caixa(self.qual)
                     self.timer = self.intervalo() * 1000
+    def _init_(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
+        self.assets = assets
+        self.partida = Partida(assets)
+        self.estado = "menu"
+        self.voltar_ajuda = "menu"
+        self.painel = ""
+        self.scroll = 0
+        self.mouse = (0, 0)
+        self.arrastado = 0
+        self.offset = (0, 0)
+        self.efeitos = []
+        self.confetes = []
+        self.passo_roda = 0
+        self.inicio_roda = 0
+        self.total_roda = 0
+        self.meteoro_x = 0
+        self.meteoro_y = 0
+        self.tempo_meteoro = 0
+        self.menu_dinos = []
+        for nivel in [1, 3, 5, 8, 12, 17]:
+            x = random.randint(90, WIDTH - 90)
+            y = random.randint(360, 490)
+            self.menu_dinos.append(Dino(nivel, x, y, assets))
+
+    def botao(self, tela, area, titulo, cor=(76, 155, 76), ativo=True, fonte="fonte"):  # Desenha um botao clicavel com efeito hover.
+        if not ativo:
+            cor = (142, 137, 115)
+        elif dentro(self.mouse, area):
+            nova_cor = []
+            for canal in cor:
+                canal += 20
+                if canal > 255:
+                    canal = 255
+                nova_cor.append(canal)
+            cor = nova_cor
+        placa(tela, area, cor)
+        x, y, largura, altura = area
+        escrever(tela, self.assets, titulo, x + largura / 2, y + altura / 2 - 1, fonte, centro=True)
 
