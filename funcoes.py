@@ -2,7 +2,7 @@ import pygame
 import random
 from config import *
 from assets import *
-
+import math
 pygame.init()
 pygame.mixer.init()
 
@@ -84,6 +84,11 @@ class Dino(pygame.sprite.Sprite):
         self.tempo_direcao = 0
         self.tempo_ovo = random(OVO_MIN, OVO_MAX) * 1000
         self.preso = False
+        # Controle da animacao
+        self.tempo_animacao = random.uniform(0, 6.28)
+        self.andando = False
+        self.angulo_animacao = 0
+        self.salto_animacao = 0
         self.escolher_direcao()
 
 def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
@@ -120,6 +125,27 @@ def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos li
                 self.rect.bottom = Y_MAX
                 self.y = self.rect.y
                 self.vy = -self.vy
+        # Detecta se o dinossauro esta andando
+        self.andando = (
+            not self.preso
+            and (self.vx != 0 or self.vy != 0)
+        )
+
+        if self.andando:
+            self.tempo_animacao += dt * 0.012
+
+            # Balanco do corpo
+            self.angulo_animacao = (
+                math.sin(self.tempo_animacao) * 3
+            )
+
+            # Pequena subida e descida
+            self.salto_animacao = (
+                abs(math.sin(self.tempo_animacao)) * 3
+            )
+        else:
+            self.angulo_animacao = 0
+            self.salto_animacao = 0
 
 class Ovo(pygame.sprite.Sprite):
 #Um ovo coletavel, com valor ligado ao nivel e vida de doze segundos.
