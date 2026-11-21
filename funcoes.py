@@ -205,4 +205,20 @@ class Partida:
         for dino in self.dinos:
             total += valor_ovo(dino.nivel)
         return total / MEDIA_OVO
+    def intervalo(self):  # Retorna o intervalo atual (em segundos) entre entregas automaticas.
+        segundos = ENTREGA_BASE - ENTREGA_PASSO * self.ent_lvl
+        if segundos < ENTREGA_MIN:
+            segundos = ENTREGA_MIN
+        return segundos
+
+    def limite_compra(self):  # Calcula o nivel maximo desbloqueado para compra na loja.
+        limite = self.maior - 1
+        if limite < 4:
+            limite = 4
+        if limite >= NIVEL_MAXIMO:
+            limite = NIVEL_MAXIMO - 1
+        return limite
+
+    def custo_entrega(self):  # Retorna o preco da proxima melhoria de velocidade de entrega.
+        return int(120 * 3 ** self.ent_lvl)
     
