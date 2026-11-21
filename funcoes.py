@@ -333,7 +333,7 @@ class Partida:
             self.venceu = True
             self.assets["vitoria"].play()
         return True
-     def coletar_ovo(self, ovo):  # Adiciona o valor do ovo as moedas e remove o ovo da tela.
+    def coletar_ovo(self, ovo):  # Adiciona o valor do ovo as moedas e remove o ovo da tela.
         if ovo not in self.ovos:
             return False
         self.moedas += ovo.valor
@@ -363,4 +363,42 @@ class Partida:
         self.proxima_troca = 0
         self.resultado = ""
         return True
+    
+    def dar_premio(self):  # Entrega moedas ou uma caixa ao finalizar o giro da roleta.
+        tipo, valor = PREMIOS[self.premio]
+        if tipo == "renda":
+            ganho = int(self.renda() * valor)
+            if ganho < 25:
+                ganho = 25
+            self.moedas += ganho
+            self.resultado = "+" + dinheiro(ganho) + " moedas!"
+        else:
+            nivel = self.qual + valor
+            if nivel >= NIVEL_MAXIMO:
+                nivel = NIVEL_MAXIMO - 1
+            if self.nova_caixa(nivel):
+                self.resultado = "Caixa com dino nivel " + str(nivel) + "!"
+            else:
+                ganho = preco_dino(nivel, self.compradas)
+                self.moedas += ganho
+                self.resultado = "Campo cheio: +" + dinheiro(ganho) + " moedas!"
+        self.assets["coletar"].play()
+
+    def atualizar_roleta(self, dt):  # Atualiza os 4 segundos de animacao do giro e o cooldown.
+        if self.girando:
+            self.tempo_giro += dt
+            if self.tempo_giro >= self.proxima_troca:
+                self.cursor_roleta += 1
+                if self.cursor_roleta >= len(PREMIOS):
+                    self.cursor_roleta = 0
+                self.proxima_troca = self.tempo_giro + 70 + int(280 * (self.tempo_giro / 4000) ** 2)
+            if self.tempo_giro >= 4000:
+                self.girando = False
+                self.cursor_roleta = self.premio
+                self.roleta_cd = COOLDOWN_ROLETA * 1000
+                self.dar_premio()
+        elif self.roleta_cd > 0:
+            self.roleta_cd -= dt
+            if self.roleta_cd < 0:
+                self.roleta_cd = 0
 
