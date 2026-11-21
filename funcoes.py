@@ -163,7 +163,7 @@ class Caixa(pygame.sprite.Sprite):
         else:
             self.espera -= dt
 class Partida:
-    """Guarda moedas, sprites, compras, melhorias, sorteio e condicao de vitoria."""
+    #Guarda moedas, sprites, compras, melhorias, sorteio e condicao de vitoria.
 
     def __init__(self, assets):  # Inicia uma partida nova com 100 moedas e dois dinos nivel 1.
         self.assets = assets
@@ -189,6 +189,13 @@ class Partida:
         self.resultado = ""
         self.aparecer_dino(1, 260, 340)
         self.aparecer_dino(1, 510, 390)
+
+    def avisar(self, mensagem):  # Mostra uma mensagem rapida na tela por 2,8 segundos.
+        self.aviso = mensagem
+        self.aviso_t = 2800
+
+    def ocupados(self):  # Retorna a soma de dinossauros vivos e caixas fechadas no campo.
+        return len(self.dinos) + len(self.caixas)
 
 
 
