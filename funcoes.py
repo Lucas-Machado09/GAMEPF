@@ -86,8 +86,43 @@ class Dino(pygame.sprite.Sprite):
         self.preso = False
         self.escolher_direcao()
 
+def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
+        if random.randint(1, 10) <= 3:
+            self.vx, self.vy = 0, 0
+        else:
+            self.vx = random.randint(-43, 43) / 1000
+            self.vy = random.randint(-19, 19) / 1000
+        self.tempo_direcao = random.randint(1000, 3000)
+
+def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos limites do gramado. rect=tela do jogo
+        self.tempo_ovo -= dt
+        if not self.preso:
+            self.tempo_direcao -= dt
+            if self.tempo_direcao <= 0:
+                self.escolher_direcao()
+            self.x += self.vx * dt
+            self.y += self.vy * dt
+            self.rect.x = int(self.x)
+            self.rect.y = int(self.y)
+            if self.rect.left < X_MIN:
+                self.rect.left = X_MIN
+                self.x = self.rect.x
+                self.vx = -self.vx
+            if self.rect.right > X_MAX:
+                self.rect.right = X_MAX
+                self.x = self.rect.x
+                self.vx = -self.vx
+            if self.rect.top < Y_MIN:
+                self.rect.top = Y_MIN
+                self.y = self.rect.y
+                self.vy = -self.vy
+            if self.rect.bottom > Y_MAX:
+                self.rect.bottom = Y_MAX
+                self.y = self.rect.y
+                self.vy = -self.vy
 
 
+   
 
 
     
