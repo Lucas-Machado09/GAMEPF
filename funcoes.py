@@ -401,4 +401,34 @@ class Partida:
             self.roleta_cd -= dt
             if self.roleta_cd < 0:
                 self.roleta_cd = 0
+    def update(self, dt, mundo_ativo):  # Atualiza dinos, ovos, caixas e entregas quando nenhum painel esta aberto.
+        self.atualizar_roleta(dt)
+        if self.aviso_t > 0:
+            self.aviso_t -= dt
+        if mundo_ativo:
+            self.tempo += dt
+            for dino in self.dinos:
+                dino.update(dt)
+            for ovo in objetos_do_grupo(self.ovos):
+                ovo.update(dt)
+            for caixa in self.caixas:
+                caixa.update(dt)
+            for dino in self.dinos:
+                if dino.tempo_ovo <= 0:
+                    dino.tempo_ovo = random.randint(OVO_MIN, OVO_MAX) * 1000
+                    if len(self.ovos) < MAX_OVOS:
+                        x = dino.rect.centerx + random.randint(-14, 14)
+                        y = dino.rect.bottom + 6
+                        self.ovos.add(Ovo(x, y, dino.nivel, self.assets))
+            for caixa in objetos_do_grupo(self.caixas):
+                if caixa.estado == "parada" and caixa.espera <= 0:
+                    x, y = caixa.rect.center
+                    nivel = caixa.nivel
+                    caixa.kill()
+                    self.aparecer_dino(nivel, x, y)
+            if self.tem_espaco():
+                self.timer -= dt
+                if self.timer <= 0:
+                    self.nova_caixa(self.qual)
+                    self.timer = self.intervalo() * 1000
 
