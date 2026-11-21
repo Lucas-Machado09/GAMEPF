@@ -289,4 +289,48 @@ class Partida:
         self.assets["comprar"].play()
         self.avisar("Dinossauro nivel " + str(nivel) + " comprado!")
         return True
+    def comprar_melhoria(self, tipo):  # Aplica uma melhoria de entrega ou qualidade das caixas.
+        if tipo == "entrega":
+            if self.ent_lvl >= ENT_MAX:
+                self.avisar("Entrega ja esta no nivel maximo.")
+                return False
+            custo = self.custo_entrega()
+        else:
+            if self.qual >= QUAL_MAX:
+                self.avisar("Qualidade ja esta no nivel maximo.")
+                return False
+            custo = self.custo_qual()
+        if self.moedas < custo:
+            self.avisar("Faltam moedas para essa melhoria.")
+            return False
+        self.moedas -= custo
+        if tipo == "entrega":
+            self.ent_lvl += 1
+            if self.timer > self.intervalo() * 1000:
+                self.timer = self.intervalo() * 1000
+        else:
+            self.qual += 1
+        self.assets["comprar"].play()
+        self.avisar("Melhoria comprada!")
+        return True
+
+    def mesclar(self, primeiro, segundo):  # Funde dois dinos iguais em um de nivel superior e verifica vitoria.
+        if primeiro == segundo or primeiro not in self.dinos or segundo not in self.dinos:
+            return False
+        if primeiro.nivel != segundo.nivel:
+            self.avisar("Escolha dois dinossauros do mesmo nivel.")
+            return False
+        if primeiro.nivel >= NIVEL_MAXIMO:
+            return False
+        nivel = primeiro.nivel + 1
+        x, y = segundo.rect.center
+        primeiro.kill()
+        segundo.kill()
+        self.aparecer_dino(nivel, x, y)
+        self.assets["encaixe"].play()
+        self.avisar("Nova evolucao: " + self.assets["dinos"][nivel]["nome"] + "!")
+        if nivel == NIVEL_MAXIMO:
+            self.venceu = True
+            self.assets["vitoria"].play()
+        return True
 
