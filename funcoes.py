@@ -197,5 +197,12 @@ class Partida:
     def ocupados(self):  # Retorna a soma de dinossauros vivos e caixas fechadas no campo.
         return len(self.dinos) + len(self.caixas)
 
-
-
+    def tem_espaco(self): # verifica se ainda cabe mais um dino ou uma caixa fechadas no campo
+        return self.ocupados() < MAX_DINOS
+    
+    def renda(self): # calcula a medida de moedas geradas por seg. pelos dinos atuais
+        total = 0
+        for dino in self.dinos:
+            total += valor_ovo(dino.nivel)
+        return total / MEDIA_OVO
+    
