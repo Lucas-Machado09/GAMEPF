@@ -500,7 +500,7 @@ class InterfaceMouse:
             menor = 999999
             for outro in self.partida.dinos:
                 if outro != dino and outro.nivel == dino.nivel and dino.nivel < NIVEL_MAXIMO:
-                    distancia = calcular_distancia(dino.rect.centerx, dino.rect.centery,
+                    distancia = distancia_dos_pontos(dino.rect.centerx, dino.rect.centery,
                                                 outro.rect.centerx, outro.rect.centery)
                     largura = dino.rect.right - dino.rect.left
                     outra_largura = outro.rect.right - outro.rect.left
