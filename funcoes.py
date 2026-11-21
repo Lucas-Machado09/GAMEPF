@@ -120,7 +120,7 @@ def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos li
                 self.rect.bottom = Y_MAX
                 self.y = self.rect.y
                 self.vy = -self.vy
-                
+
 class Ovo(pygame.sprite.Sprite):
 #Um ovo coletavel, com valor ligado ao nivel e vida de doze segundos.
 
@@ -162,7 +162,33 @@ class Caixa(pygame.sprite.Sprite):
             self.rect.centery = int(self.y)
         else:
             self.espera -= dt
+class Partida:
+    """Guarda moedas, sprites, compras, melhorias, sorteio e condicao de vitoria."""
 
+    def __init__(self, assets):  # Inicia uma partida nova com 100 moedas e dois dinos nivel 1.
+        self.assets = assets
+        self.moedas = 100
+        self.dinos = pygame.sprite.Group()
+        self.ovos = pygame.sprite.Group()
+        self.caixas = pygame.sprite.Group()
+        self.compradas = [0] * NIVEL_MAXIMO
+        self.ent_lvl = 0
+        self.qual = 1
+        self.maior = 1
+        self.timer = 3000
+        self.tempo = 0
+        self.aviso = "Junte dois dinos iguais para evoluir!"
+        self.aviso_t = 4000
+        self.venceu = False
+        self.girando = False
+        self.tempo_giro = 0
+        self.proxima_troca = 0
+        self.roleta_cd = 0
+        self.cursor_roleta = 0
+        self.premio = 0
+        self.resultado = ""
+        self.aparecer_dino(1, 260, 340)
+        self.aparecer_dino(1, 510, 390)
 
 
 
