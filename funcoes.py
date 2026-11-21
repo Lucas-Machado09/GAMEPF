@@ -2,7 +2,7 @@ import pygame
 import random
 from config import *
 from assets import *
-
+import math
 pygame.init()
 pygame.mixer.init()
 
@@ -84,9 +84,14 @@ class Dino(pygame.sprite.Sprite):
         self.tempo_direcao = 0
         self.tempo_ovo = random(OVO_MIN, OVO_MAX) * 1000
         self.preso = False
+        # Controle da animacao
+        self.tempo_animacao = random.uniform(0, 6.28)
+        self.andando = False
+        self.angulo_animacao = 0
+        self.salto_animacao = 0
         self.escolher_direcao()
 
-    def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
+def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
         if random.randint(1, 10) <= 3:
             self.vx, self.vy = 0, 0
         else:
@@ -120,6 +125,27 @@ def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos li
                 self.rect.bottom = Y_MAX
                 self.y = self.rect.y
                 self.vy = -self.vy
+        # Detecta se o dinossauro esta andando
+        self.andando = (
+            not self.preso
+            and (self.vx != 0 or self.vy != 0)
+        )
+
+        if self.andando:
+            self.tempo_animacao += dt * 0.012
+
+            # Balanco do corpo
+            self.angulo_animacao = (
+                math.sin(self.tempo_animacao) * 3
+            )
+
+            # Pequena subida e descida
+            self.salto_animacao = (
+                abs(math.sin(self.tempo_animacao)) * 3
+            )
+        else:
+            self.angulo_animacao = 0
+            self.salto_animacao = 0
 
 class Ovo(pygame.sprite.Sprite):
 #Um ovo coletavel, com valor ligado ao nivel e vida de doze segundos.
@@ -205,4 +231,34 @@ class Partida:
         for dino in self.dinos:
             total += valor_ovo(dino.nivel)
         return total / MEDIA_OVO
+    def intervalo(self):  # Retorna o intervalo atual (em segundos) entre entregas automaticas.
+        segundos = ENTREGA_BASE - ENTREGA_PASSO * self.ent_lvl
+        if segundos < ENTREGA_MIN:
+            segundos = ENTREGA_MIN
+        return segundos
+
+    def limite_compra(self):  # Calcula o nivel maximo desbloqueado para compra na loja.
+        limite = self.maior - 1
+        if limite < 4:
+            limite = 4
+        if limite >= NIVEL_MAXIMO:
+            limite = NIVEL_MAXIMO - 1
+        return limite
+
+    def custo_entrega(self):  # Retorna o preco da proxima melhoria de velocidade de entrega.
+        return int(120 * 3 ** self.ent_lvl)
+    def custo_qual(self):  # Retorna o preco da proxima melhoria de qualidade das caixas.
+        return int(60 * 2.5 ** self.qual)
+
+    def aparecer_dino(self, nivel, x, y):  # Cria um dinossauro no campo e atualiza o maior nivel alcancado.
+        dino = Dino(nivel, x, y, self.assets)
+        self.dinos.add(dino)
+        if nivel > self.maior:
+            self.maior = nivel
+        return dino
+
+    def posicao(self):  # Sorteia uma coordenada (x, y) valida dentro do gramado.
+        x = random.randint(X_MIN + 65, X_MAX - 65)
+        y = random.randint(Y_MIN + 45, Y_MAX - 45)
+        return x, y
     
