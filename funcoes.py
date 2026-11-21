@@ -268,25 +268,25 @@ class Partida:
             self.caixas.add(Caixa(nivel, x, y, self.assets))
             return True
     
-        def comprar_dino(self, nivel):  # Confere desbloqueio, espaco e moedas antes de comprar um dino.
-            if nivel < 1 or nivel >= NIVEL_MAXIMO:
-                self.avisar("O nivel 20 so pode ser criado por fusao.")
-                return False
-            if nivel > self.limite_compra():
-                self.avisar("Alcance o nivel " + str(nivel + 1) + " para liberar.")
-                return False
-            if not self.tem_espaco():
-                self.avisar("Campo cheio! Junte dois dinossauros.")
-                return False
-            custo = preco_dino(nivel, self.compradas)
-            if self.moedas < custo:
-                self.avisar("Faltam moedas para essa compra.")
-                return False
-            self.moedas -= custo
-            compra_dino(nivel, self.compradas)
-            x, y = self.posicao()
-            self.aparecer_dino(nivel, x, y)
-            self.assets["comprar"].play()
-            self.avisar("Dinossauro nivel " + str(nivel) + " comprado!")
-            return True
-    
+    def comprar_dino(self, nivel):  # Confere desbloqueio, espaco e moedas antes de comprar um dino.
+        if nivel < 1 or nivel >= NIVEL_MAXIMO:
+            self.avisar("O nivel 20 so pode ser criado por fusao.")
+            return False
+        if nivel > self.limite_compra():
+            self.avisar("Alcance o nivel " + str(nivel + 1) + " para liberar.")
+            return False
+        if not self.tem_espaco():
+            self.avisar("Campo cheio! Junte dois dinossauros.")
+            return False
+        custo = preco_dino(nivel, self.compradas)
+        if self.moedas < custo:
+            self.avisar("Faltam moedas para essa compra.")
+            return False
+        self.moedas -= custo
+        compra_dino(nivel, self.compradas)
+        x, y = self.posicao()
+        self.aparecer_dino(nivel, x, y)
+        self.assets["comprar"].play()
+        self.avisar("Dinossauro nivel " + str(nivel) + " comprado!")
+        return True
+
