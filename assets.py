@@ -109,3 +109,27 @@ def anel(tela, cor, cx, cy, rx, ry, grossura=2):
     for px, py in CIRCULO:
         pontos.append((int(cx + rx * px / 1000), int(cy + ry * py / 1000)))
     pygame.draw.lines(tela, cor, True, pontos, grossura)
+
+ # Desenha uma caixa de madeira de entrega centralizada em (x, y).
+def desenhar_caixa(tela, x, y, k=1.0):  
+    lado = int(42 * k)
+    meio = int(lado / 2)
+    oval(tela, (59, 43, 25), x, y + meio + 2, int(22 * k), int(6 * k))
+    placa(tela, (x - meio, y - meio, lado, lado), (184, 128, 66), (92, 56, 26))
+    poligono_local(tela, (132, 86, 40), [(-15, -12), (-11, -15), (15, 12), (11, 15)], x, y, k)
+    poligono_local(tela, (132, 86, 40), [(11, -15), (15, -12), (-11, 15), (-15, 12)], x, y, k)
+
+# Desenha um ovo manchado com sombra na posicao (x, y).
+def desenhar_ovo(tela, x, y, k=1.0):  
+    oval(tela, (59, 43, 25), x, y + int(13 * k), int(12 * k), int(4 * k))
+    oval(tela, (250, 240, 206), x, y, int(11 * k), int(14 * k))
+    anel(tela, (145, 114, 72), x, y, int(11 * k), int(14 * k), 2)
+    oval(tela, (194, 152, 88), x - int(4 * k), y - int(3 * k), int(3 * k), int(4 * k))
+    oval(tela, (194, 152, 88), x + int(4 * k), y + int(3 * k), int(2 * k), int(3 * k))
+
+# Desenha uma moeda dourada na posicao (x, y).
+def desenhar_moeda(tela, x, y, k=1.0):  
+    raio = int(14 * k)
+    pygame.draw.circle(tela, (153, 102, 24), (int(x), int(y)), raio)
+    pygame.draw.circle(tela, (255, 214, 68), (int(x), int(y)), int(raio * 0.82))
+    retangulo(tela, (214, 153, 36), (int(x - 2 * k), int(y - 6 * k), max(2, int(4 * k)), max(4, int(12 * k))))
