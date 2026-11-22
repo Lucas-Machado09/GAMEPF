@@ -495,7 +495,7 @@ class Partida:
         menor = 999999
         for outro in self.partida.dinos:
             if outro != dino and outro.nivel == dino.nivel and dino.nivel < NIVEL_MAXIMO:
-                distancia = distancia_quadrada(dino.rect.centerx, dino.rect.centery,
+                distancia = distancia_dos_pontos(dino.rect.centerx, dino.rect.centery,
                                                outro.rect.centerx, outro.rect.centery)
                 largura = dino.rect.right - dino.rect.left
                 outra_largura = outro.rect.right - outro.rect.left
@@ -529,12 +529,12 @@ class Partida:
             self.arrastado = 0
 
     def pegar_no_campo(self, pos):  # Coleta um ovo clicado ou inicia o arrasto de um dinossauro.
-        ovos = objetos_do_grupo(self.partida.ovos)
+        ovos = itens_do_jogo(self.partida.ovos)
         indice = len(ovos) - 1
         coletou = False
         while indice >= 0 and not coletou:
             ovo = ovos[indice]
-            if distancia_quadrada(pos[0], pos[1], ovo.rect.centerx, ovo.rect.centery) <= 23 ** 2:
+            if distancia_dos_pontos(pos[0], pos[1], ovo.rect.centerx, ovo.rect.centery) <= 23 ** 2:
                 self.partida.coletar_ovo(ovo)
                 coletou = True
             indice -= 1

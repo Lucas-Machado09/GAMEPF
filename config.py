@@ -77,3 +77,15 @@ for i in range(64):
     angulo = 2 * math.pi * i / 64
     CIRCULO.append((int(math.cos(angulo) * 1000), int(math.sin(angulo) * 1000)))
 
+# coordenadas dos botões
+BTN_FECHAR = (677, 89, 32, 30)
+BTN_ANTERIOR = (95, 505, 115, 32)
+BTN_PROXIMO = (590, 505, 115, 32)
+BTN_GIRAR = (310, 485, 180, 44)
+BTN_JOGAR = (275, 325, 250, 56)
+BTN_COMO = (305, 396, 190, 42)
+BTN_NOVO = (280, 485, 240, 46)
+BTN_DINOS = (472, 11, 88, 36)
+BTN_MELHORIAS = (568, 11, 104, 36)
+BTN_ROLETA = (680, 11, 108, 36)
+BTN_AJUDA = (430, 11, 34, 36)
