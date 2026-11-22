@@ -760,4 +760,61 @@ class Partida:
         escrever(tela, self.assets, "Arraste para evoluir. Clique nos ovos para ganhar moedas.", 400, 244, "pequena", (255, 248, 215), True)
         self.botao(tela, BTN_JOGAR, "JOGAR", (77, 165, 76), fonte="grande")
         self.botao(tela, BTN_COMO, "Como jogar", (155, 107, 54))
+        
+    def desenhar_campo(self, tela):  # Desenha dinossauros, caixas, ovos e o anel de fusao no gramado.
+        for dino in ordenar_dinos(self.partida.dinos):
+            if dino != self.arrastado:
+                self.desenhar_dino(tela, dino)
+        for caixa in self.partida.caixas:
+            desenhar_caixa(tela, caixa.rect.centerx, caixa.rect.centery)
+        for ovo in self.partida.ovos:
+            if ovo.vida >= 3000 or int(ovo.vida / 200) % 2 == 0:
+                desenhar_ovo(tela, ovo.rect.centerx, ovo.rect.centery)
+        for efeito in self.efeitos:
+            tamanho = 20 + int((600 - efeito[2]) / 20)
+            anel(tela, (255, 231, 122), efeito[0], efeito[1], tamanho, int(tamanho / 2))
+        if self.arrastado != 0:
+            alvo = self.alvo(self.arrastado)
+            if alvo != 0:
+                anel(tela, (255, 232, 88), alvo.rect.centerx, alvo.rect.bottom - 1, 43, 13)
+            self.desenhar_dino(tela, self.arrastado)
+        retangulo(tela, (65, 46, 27), (0, HEIGHT - 23, WIDTH, 23))
+        escrever(tela, self.assets, "Arraste dinos iguais para juntar  |  Clique nos ovos  |  Use a loja e a roleta", 400, HEIGHT - 13, "pequena", centro=True)
 
+    def desenhar_hud(self, tela):  # Desenha a barra superior com moedas, botoes e barra de proxima caixa.
+        p = self.partida
+        retangulo(tela, (87, 58, 30), (0, 0, WIDTH, 58))
+        retangulo(tela, (132, 91, 47), (0, 0, WIDTH, 4))
+        desenhar_moeda(tela, 22, 25, 0.8)
+        escrever(tela, self.assets, dinheiro(p.moedas), 43, 10, "grande")
+        escrever(tela, self.assets, dinheiro(p.renda()) + "/s em ovos", 45, 38, "pequena", (255, 221, 122))
+        escrever(tela, self.assets, "Dinos " + str(p.ocupados()) + "/20", 272, 9, "fonte")
+        escrever(tela, self.assets, "Melhor: Nv " + str(p.maior), 273, 35, "pequena", (198, 242, 154))
+        self.botao(tela, BTN_AJUDA, "?", (145, 100, 55), fonte="pequena")
+        self.botao(tela, BTN_DINOS, "Dinos", (76, 151, 76))
+        self.botao(tela, BTN_MELHORIAS, "Melhorias", (92, 126, 183), fonte="pequena")
+        titulo = "ROLETA!"
+        if p.girando:
+            titulo = "Girando..."
+        elif p.roleta_cd > 0:
+            titulo = "Roleta " + str(int((p.roleta_cd + 999) / 1000)) + "s"
+        self.botao(tela, BTN_ROLETA, titulo, (198, 126, 41), fonte="pequena")
+        retangulo(tela, (59, 42, 23), (0, 58, WIDTH, 8))
+        progresso = 1 - p.timer / (p.intervalo() * 1000)
+        if progresso < 0:
+            progresso = 0
+        if progresso > 1:
+            progresso = 1
+        retangulo(tela, (139, 205, 74), (0, 58, int(WIDTH * progresso), 8))
+        texto = "Proxima caixa (Nv " + str(p.qual) + ") em " + str(int((p.timer + 999) / 1000)) + "s"
+        if not p.tem_espaco():
+            texto = "Campo cheio! Junte dinos para abrir espaco."
+        if self.painel == "":
+            escrever(tela, self.assets, texto, 12, 73, "pequena")
+
+    def painel_base(self, tela, titulo, detalhe):  # Desenha a moldura padrao dos paineis internos.
+        placa(tela, (70, 72, 660, 480), (242, 224, 172))
+        retangulo(tela, (147, 99, 48), (83, 84, 634, 40))
+        escrever(tela, self.assets, titulo, 400, 104, "grande", (255, 239, 184), True)
+        self.botao(tela, BTN_FECHAR, "X", (191, 73, 49), fonte="pequena")
+        escrever(tela, self.assets, detalhe, 400, 135, "pequena", (93, 63, 32), True)
