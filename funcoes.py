@@ -575,4 +575,94 @@ class Partida:
                 self.inicio_roda = self.passo_roda
                 destino = (-p.premio * 8 - 4) % 64
                 self.total_roda = (destino - self.inicio_roda) % 64 + 64 * 5
+    def evento(self, evento):  # Trata cliques, soltura e rodinha do mouse conforme a tela ativa.
+        if evento.type == pygame.MOUSEWHEEL:
+            if self.estado == "jogo" and self.painel == "dinos":
+                self.mudar_scroll(-evento.y)
+        elif evento.type == pygame.MOUSEBUTTONUP:
+            if evento.button == 1:
+                self.soltar()
+        elif evento.type == pygame.MOUSEBUTTONDOWN:
+            if evento.button == 1:
+                pos = evento.pos
+                self.mouse = pos
+                if self.estado == "menu":
+                    if dentro(pos, BTN_JOGAR):
+                        self.iniciar()
+                    elif dentro(pos, BTN_COMO):
+                        self.voltar_ajuda = "menu"
+                        self.estado = "ajuda"
+                elif self.estado == "ajuda":
+                    if dentro(pos, BTN_FECHAR) or dentro(pos, (286, 485, 228, 43)):
+                        self.estado = self.voltar_ajuda
+                elif self.estado == "vitoria":
+                    if dentro(pos, BTN_NOVO):
+                        self.iniciar()
+                elif self.estado == "jogo":
+                    novo_painel = ""
+                    if dentro(pos, BTN_DINOS):
+                        novo_painel = "dinos"
+                    elif dentro(pos, BTN_MELHORIAS):
+                        novo_painel = "melhorias"
+                    elif dentro(pos, BTN_ROLETA):
+                        novo_painel = "roleta"
+                    if novo_painel != "":
+                        if self.painel == novo_painel:
+                            self.painel = ""
+                        else:
+                            self.painel = novo_painel
+                    elif dentro(pos, BTN_AJUDA):
+                        self.voltar_ajuda = "jogo"
+                        self.estado = "ajuda"
+                    elif self.painel != "":
+                        self.clique_painel(pos)
+                    elif pos[1] >= 90:
+                        self.pegar_no_campo(pos)
+
+    def update(self, dt):  # Atualiza a logica da tela atual, o arrasto e a queda do meteoro.
+        self.mouse = pygame.mouse.get_pos()
+        if self.estado == "menu":
+            for dino in self.menu_dinos:
+                dino.update(dt)
+        elif self.estado == "jogo":
+            estava_girando = self.partida.girando
+            if self.arrastado != 0:
+                dino = self.arrastado
+                dino.rect.center = (self.mouse[0] - self.offset[0], self.mouse[1] - self.offset[1])
+                dino.x, dino.y = dino.rect.x, dino.rect.y
+            self.partida.update(dt, self.painel == "")
+            if estava_girando:
+                progresso = self.partida.tempo_giro / 4000
+                if progresso > 1:
+                    progresso = 1
+                suavizado = 1 - (1 - progresso) ** 3
+                self.passo_roda = int(self.inicio_roda + self.total_roda * suavizado) % 64
+            novos = []
+            for efeito in self.efeitos:
+                efeito[2] -= dt
+                if efeito[2] > 0:
+                    novos.append(efeito)
+            self.efeitos = novos
+            if self.partida.venceu:
+                self.estado = "meteoro"
+                self.painel = ""
+                self.arrastado = 0
+                self.tempo_meteoro = 0
+                self.meteoro_x = WIDTH + 140
+                self.meteoro_y = -140
+        elif self.estado == "meteoro":
+            self.tempo_meteoro += dt
+            self.meteoro_x -= 0.52 * dt
+            self.meteoro_y += 0.36 * dt
+            if self.tempo_meteoro >= 2100:
+                self.estado = "vitoria"
+        elif self.estado == "vitoria":
+            if len(self.confetes) < 120:
+                self.confetes.append([random.randint(8, WIDTH - 8), -8, random.randint(65, 170), random.randint(0, 3)])
+            novos = []
+            for confete in self.confetes:
+                confete[1] += confete[2] * dt / 1000
+                if confete[1] < HEIGHT:
+                    novos.append(confete)
+            self.confetes = novos
 
