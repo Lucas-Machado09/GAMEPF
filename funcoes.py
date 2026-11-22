@@ -665,4 +665,51 @@ class Partida:
                 if confete[1] < HEIGHT:
                     novos.append(confete)
             self.confetes = novos
+    def desenhar_dino(self, tela, dino):  # Desenha sombra, sprite do dinossauro e medalha com seu nivel.
+        r = dino.rect
+        oval(tela, (59, 43, 25), r.centerx, r.bottom - 2, 27, 7)
+        tela.blit(dino.image, r)
+        cor = (241, 215, 147)
+        if dino.nivel >= 15:
+            cor = (255, 207, 67)
+        elif dino.nivel >= 8:
+            cor = (174, 147, 238)
+        pygame.draw.circle(tela, (66, 42, 23), (r.centerx, r.bottom + 9), 11)
+        escrever(tela, self.assets, str(dino.nivel), r.centerx, r.bottom + 8, "pequena", cor, True)
+
+    def desenhar(self, tela):  # Desenha a tela correspondente ao estado atual do jogo.
+        tela.blit(self.assets["fundo"], (0, 0))
+        if self.estado == "menu":
+            self.desenhar_menu(tela)
+        elif self.estado == "ajuda":
+            self.desenhar_ajuda(tela)
+        elif self.estado == "meteoro":
+            self.desenhar_meteoro(tela)
+        elif self.estado == "vitoria":
+            self.desenhar_vitoria(tela)
+        else:
+            self.desenhar_campo(tela)
+            self.desenhar_hud(tela)
+            if self.painel == "dinos":
+                self.desenhar_loja(tela)
+            elif self.painel == "melhorias":
+                self.desenhar_melhorias(tela)
+            elif self.painel == "roleta":
+                self.desenhar_roleta(tela)
+            if self.partida.aviso_t > 0:
+                y_aviso = 105
+                if self.painel != "":
+                    y_aviso = 563
+                escrever(tela, self.assets, self.partida.aviso, WIDTH / 2, y_aviso, "fonte", (255, 242, 168), True)
+
+    def desenhar_menu(self, tela):  # Desenha a tela inicial com dinos andando, titulo e botao JOGAR.
+        for dino in self.menu_dinos:
+            self.desenhar_dino(tela, dino)
+        placa(tela, (82, 88, 636, 205), (95, 63, 34))
+        placa(tela, (91, 96, 618, 187), (45, 70, 43))
+        escrever(tela, self.assets, "DinoEvolution", 400, 145, "titulo", (255, 216, 86), True)
+        escrever(tela, self.assets, "Junte dinos iguais ate criar o Rei T-Rex!", 400, 207, "fonte", (255, 250, 224), True)
+        escrever(tela, self.assets, "Arraste para evoluir. Clique nos ovos para ganhar moedas.", 400, 244, "pequena", (255, 248, 215), True)
+        self.botao(tela, BTN_JOGAR, "JOGAR", (77, 165, 76), fonte="grande")
+        self.botao(tela, BTN_COMO, "Como jogar", (155, 107, 54))
 
