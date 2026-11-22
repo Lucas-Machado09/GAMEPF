@@ -1,4 +1,5 @@
 from os import path 
+import math
 
 # larg / altura
 WIDTH = 800
@@ -70,4 +71,9 @@ VERDE = (92, 205, 145)
 DOURADO = (255, 207, 93)
 CINZA = (172, 192, 181)
 VERMELHO = (255, 140, 121)
+
+CIRCULO = []
+for i in range(64):
+    angulo = 2 * math.pi * i / 64
+    CIRCULO.append((int(math.cos(angulo) * 1000), int(math.sin(angulo) * 1000)))
 

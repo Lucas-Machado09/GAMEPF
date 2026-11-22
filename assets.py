@@ -95,3 +95,17 @@ def escrever(tela, assets, texto, x, y, fonte="fonte", cor=(255, 250, 232), cent
         r.topleft = (int(x), int(y))
     tela.blit(sombra, (r.x + 2, r.y + 2))
     tela.blit(superficie, r)
+
+# Desenha uma elipse preenchida usando a tabela CIRCULO.
+def oval(tela, cor, cx, cy, rx, ry):  
+    pontos = []
+    for px, py in CIRCULO:
+        pontos.append((int(cx + rx * px / 1000), int(cy + ry * py / 1000)))
+    pygame.draw.polygon(tela, cor, pontos)
+
+# Desenha o contorno de uma elipse usando CIRCULO.
+def anel(tela, cor, cx, cy, rx, ry, grossura=2):  
+    pontos = []
+    for px, py in CIRCULO:
+        pontos.append((int(cx + rx * px / 1000), int(cy + ry * py / 1000)))
+    pygame.draw.lines(tela, cor, True, pontos, grossura)
