@@ -469,4 +469,110 @@ class Partida:
         placa(tela, area, cor)
         x, y, largura, altura = area
         escrever(tela, self.assets, titulo, x + largura / 2, y + altura / 2 - 1, fonte, centro=True)
+    def iniciar(self):  # Comeca uma nova partida zerando os estados anteriores.
+        self.partida = Partida(self.assets)
+        self.estado = "jogo"
+        self.painel = ""
+        self.scroll = 0
+        self.arrastado = 0
+        self.efeitos = []
+        self.confetes = []
+        self.passo_roda = 0
+        self.tempo_meteoro = 0
+
+    def area_compra(self, linha):  # Calcula a area clicavel do botao Comprar de uma linha da loja.
+        return (569, 149 + linha * 57, 128, 34)
+
+    def mudar_scroll(self, passo):  # Move a rolagem da loja entre os 20 niveis disponiveis.
+        self.scroll += passo
+        if self.scroll < 0:
+            self.scroll = 0
+        if self.scroll > NIVEL_MAXIMO - 6:
+            self.scroll = NIVEL_MAXIMO - 6
+
+    def alvo(self, dino):  # Encontra um dinossauro do mesmo nivel proximo ao que esta sendo arrastado.
+        melhor = 0
+        menor = 999999
+        for outro in self.partida.dinos:
+            if outro != dino and outro.nivel == dino.nivel and dino.nivel < NIVEL_MAXIMO:
+                distancia = distancia_quadrada(dino.rect.centerx, dino.rect.centery,
+                                               outro.rect.centerx, outro.rect.centery)
+                largura = dino.rect.right - dino.rect.left
+                outra_largura = outro.rect.right - outro.rect.left
+                alcance = int((largura + outra_largura) * 0.24) + 13
+                if distancia < alcance ** 2 and distancia < menor:
+                    melhor = outro
+                    menor = distancia
+        return melhor
+    def limitar_dino(self, dino):  # Mantem o dinossauro dentro dos limites do gramado ao soltar.
+        if dino.rect.left < X_MIN:
+            dino.rect.left = X_MIN
+        if dino.rect.right > X_MAX:
+            dino.rect.right = X_MAX
+        if dino.rect.top < Y_MIN:
+            dino.rect.top = Y_MIN
+        if dino.rect.bottom > Y_MAX:
+            dino.rect.bottom = Y_MAX
+        dino.x, dino.y = dino.rect.x, dino.rect.y
+
+    def soltar(self):  # Solta o dino arrastado e realiza a fusao se houver par valido embaixo.
+        if self.arrastado != 0:
+            dino = self.arrastado
+            outro = self.alvo(dino)
+            if outro != 0:
+                x, y = outro.rect.center
+                if self.partida.mesclar(dino, outro):
+                    self.efeitos.append([x, y, 600])
+            else:
+                self.limitar_dino(dino)
+            dino.preso = False
+            self.arrastado = 0
+
+    def pegar_no_campo(self, pos):  # Coleta um ovo clicado ou inicia o arrasto de um dinossauro.
+        ovos = objetos_do_grupo(self.partida.ovos)
+        indice = len(ovos) - 1
+        coletou = False
+        while indice >= 0 and not coletou:
+            ovo = ovos[indice]
+            if distancia_quadrada(pos[0], pos[1], ovo.rect.centerx, ovo.rect.centery) <= 23 ** 2:
+                self.partida.coletar_ovo(ovo)
+                coletou = True
+            indice -= 1
+        if not coletou:
+            dinos = ordenar_dinos(self.partida.dinos)
+            indice = len(dinos) - 1
+            while indice >= 0 and self.arrastado == 0:
+                dino = dinos[indice]
+                r = dino.rect
+                area = (r.left, r.top, r.right - r.left, r.bottom - r.top)
+                if dentro(pos, area):
+                    self.arrastado = dino
+                    dino.preso = True
+                    dino.vx, dino.vy = 0, 0
+                    self.offset = (pos[0] - r.centerx, pos[1] - r.centery)
+                indice -= 1
+
+    def clique_painel(self, pos):  # Processa cliques dentro dos paineis de Loja, Melhorias ou Roleta.
+        p = self.partida
+        if dentro(pos, BTN_FECHAR):
+            self.painel = ""
+        elif self.painel == "dinos":
+            if dentro(pos, BTN_ANTERIOR):
+                self.mudar_scroll(-6)
+            elif dentro(pos, BTN_PROXIMO):
+                self.mudar_scroll(6)
+            else:
+                for linha in range(6):
+                    if dentro(pos, self.area_compra(linha)):
+                        p.comprar_dino(self.scroll + linha + 1)
+        elif self.painel == "melhorias":
+            if dentro(pos, (541, 204, 156, 43)):
+                p.comprar_melhoria("entrega")
+            elif dentro(pos, (541, 347, 156, 43)):
+                p.comprar_melhoria("qualidade")
+        elif self.painel == "roleta" and dentro(pos, BTN_GIRAR):
+            if p.girar():
+                self.inicio_roda = self.passo_roda
+                destino = (-p.premio * 8 - 4) % 64
+                self.total_roda = (destino - self.inicio_roda) % 64 + 64 * 5
 
