@@ -665,17 +665,65 @@ class Partida:
                 if confete[1] < HEIGHT:
                     novos.append(confete)
             self.confetes = novos
-    def desenhar_dino(self, tela, dino):  # Desenha sombra, sprite do dinossauro e medalha com seu nivel.
+    def desenhar_dino(self, tela, dino):
+        # Posicao original
         r = dino.rect
-        oval(tela, (59, 43, 25), r.centerx, r.bottom - 2, 27, 7)
-        tela.blit(dino.image, r)
+
+        # Sombra
+        oval(tela, (59, 43, 25),
+             r.centerx, r.bottom - 2, 27, 7)
+
+        # Imagem do dinossauro
+        imagem = dino.image
+
+        # Animacao enquanto anda
+        if dino.andando and not dino.preso:
+
+            imagem = pygame.transform.rotate(
+                dino.image,
+                dino.angulo_animacao
+            )
+
+            novo_rect = imagem.get_rect(
+                center=(
+                    r.centerx,
+                    r.centery - int(dino.salto_animacao)
+                )
+            )
+
+            tela.blit(imagem, novo_rect)
+
+        else:
+            # Dino parado ou arrastado
+            tela.blit(imagem, r)
+
+        # Cor da medalha
         cor = (241, 215, 147)
+
         if dino.nivel >= 15:
             cor = (255, 207, 67)
+
         elif dino.nivel >= 8:
             cor = (174, 147, 238)
-        pygame.draw.circle(tela, (66, 42, 23), (r.centerx, r.bottom + 9), 11)
-        escrever(tela, self.assets, str(dino.nivel), r.centerx, r.bottom + 8, "pequena", cor, True)
+
+        # Circulo do nivel
+        pygame.draw.circle(
+            tela,
+            (66, 42, 23),
+            (r.centerx, r.bottom + 9),
+            11
+        )
+
+        escrever(
+            tela,
+            self.assets,
+            str(dino.nivel),
+            r.centerx,
+            r.bottom + 8,
+            "pequena",
+            cor,
+            True
+        )
 
     def desenhar(self, tela):  # Desenha a tela correspondente ao estado atual do jogo.
         tela.blit(self.assets["fundo"], (0, 0))
