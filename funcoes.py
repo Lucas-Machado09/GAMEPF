@@ -6,10 +6,6 @@ import math
 pygame.init()
 pygame.mixer.init()
 
-
-window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("DinoEvolution")
-
 # Calcula o valor de um ovo: 1, 2, 4, 8... 20 conforme o nivel do dino.
 def valor_ovo(n):
     a = 2 ** (n - 1)
@@ -966,5 +962,5 @@ def main():  # Inicializa o Pygame, cria a janela e roda o loop principal do jog
     pygame.quit()
 
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     main()
