@@ -1,5 +1,4 @@
 
-
 # Dino Evolution
 
 Dino Evolution é um jogo 2D de evolução e fusão de dinossauros, desenvolvido em Python com a biblioteca Pygame.
@@ -32,7 +31,7 @@ A partida começa com **100 moedas e dois dinossauros de nível 1**.
 ## Regras importantes
 
 - O campo comporta até **20 dinossauros e caixas somados**.
-- Os ovos desaparecem após **12 segundos**.
+- Os ovos desaparecem após **6 segundos**.
 - A loja começa com os níveis 1 a 4 disponíveis. Novas compras são liberadas conforme a evolução dos dinossauros.
 - O dinossauro de nível 20 só pode ser obtido por fusão.
 - Os painéis de Dinos, Melhorias e Roleta pausam os acontecimentos do campo. A animação e o tempo de espera da roleta continuam sendo atualizados.
