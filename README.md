@@ -108,3 +108,10 @@ DinoEvolution/
 
 Mantenha os nomes dos arquivos e a organização das pastas, pois o jogo utiliza essa estrutura para localizar as imagens e os sons.
 
+## IA
+
+**Prompts**
+- **Imagens dinos** 100%: https://chatgpt.com/share/e/6b043afc-8d30-83e9-94b0-d454994863fc?ogimg=plain
+- **Imagens de fundo e meteoro** 100%: https://chatgpt.com/share/e/6b043bbf-f5a0-83e9-861c-ed4f5a898766?ogimg=plain
+- **Animações** 100%: https://chatgpt.com/share/e/6b043d00-5714-83e8-a86a-1257a09df6d5?ogimg=plain
+- **Retirar fundo preto** 70%:  https://chatgpt.com/s/cx_6b043f5947508191a301f8c47873c692
