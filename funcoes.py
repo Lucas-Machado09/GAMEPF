@@ -947,7 +947,7 @@ def main():  # Inicializa o Pygame, cria a janela e roda o loop principal do jog
     pygame.display.set_caption("DinoEvolution!")
     relogio = pygame.time.Clock()
     assets = carregas_assets()
-    interface = InterfaceMouse(assets)
+    interface = InterFaceMouse(assets)
     pygame.mixer.music.play(loops=-1)
     rodando = True
     while rodando:
