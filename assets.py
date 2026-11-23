@@ -8,7 +8,7 @@ def monta_info():
     for n in range(1, NIVEL_MAXIMO + 1):
         nome, arquivo , escala = BASE [n - 1]
         imagem = pygame.image.load(path.join(IMG_DIR, arquivo)).convert()
-        imagem.set_colorkey(0,0,0) # remove o preto do JPEG antes de redimensionar. Tivemos auxilio de IA
+        imagem.set_colorkey((0,0,0)) # remove o preto do JPEG antes de redimensionar. Tivemos auxilio de IA
         tamanho = imagem.get_rect()
         largura = int(86 * escala)
         altura = int(largura * tamanho.bottom / tamanho.right)
@@ -27,8 +27,8 @@ def monta_info():
 # imagnes do fundo, meteoro, dino e sons
 def carregas_assets():
     assets = {}
-    fundo = pygame.image.loud(path.join(IMG_DIR, FUNDO)).convert
-    assets["fundo"] = pygame.transform.scale(fundo, (WIDTH,HEIGHT))
+    fundo = pygame.image.load(path.join(IMG_DIR, FUNDO)).convert()
+    assets["fundo"] = pygame.transform.scale(fundo, (WIDTH, HEIGHT))
     meteoro = pygame.image.load(path.join(IMG_DIR,METEORO)).convert_alpha()
     tam_meteoro = meteoro.get_rect()
     larg_meteoro = 340

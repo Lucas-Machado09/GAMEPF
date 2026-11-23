@@ -78,7 +78,7 @@ class Dino(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
         self.tempo_direcao = 0
-        self.tempo_ovo = random(OVO_MIN, OVO_MAX) * 1000
+        self.tempo_ovo = random.randint(OVO_MIN, OVO_MAX) * 1000
         self.preso = False
         # Controle da animacao
         self.tempo_animacao = random.uniform(0, 6.28)
@@ -87,7 +87,7 @@ class Dino(pygame.sprite.Sprite):
         self.salto_animacao = 0
         self.escolher_direcao()
 
-def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
+    def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em uma nova direcao.
         if random.randint(1, 10) <= 3:
             self.vx, self.vy = 0, 0
         else:
@@ -95,7 +95,7 @@ def escolher_direcao(self):  # Sorteia se o dinossauro fica parado ou anda em um
             self.vy = random.randint(-19, 19) / 1000
         self.tempo_direcao = random.randint(1000, 3000)
 
-def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos limites do gramado. rect=tela do jogo
+    def update(self, dt):  # Atualiza o contador de ovos e move o dino dentro dos limites do gramado. rect=tela do jogo
         self.tempo_ovo -= dt
         if not self.preso:
             self.tempo_direcao -= dt
@@ -429,7 +429,7 @@ class Partida:
                     self.timer = self.intervalo() * 1000
 
 class InterFaceMouse: # gerencia, os cliques arratos dos dinossauros, animações e desenhos na janela
-    def _init_(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
+    def __init__(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
         self.assets = assets
         self.partida = Partida(assets)
         self.estado = "menu"
