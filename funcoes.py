@@ -431,6 +431,8 @@ class Partida:
                 if self.timer <= 0:
                     self.nova_caixa(self.qual)
                     self.timer = self.intervalo() * 1000
+
+class InterFaceMouse: # gerencia, os cliques arratos dos dinossauros, animações e desenhos na janela
     def _init_(self, assets):  # Inicializa estados de tela, variaveis de arrasto e do meteoro.
         self.assets = assets
         self.partida = Partida(assets)
@@ -944,7 +946,7 @@ def main():  # Inicializa o Pygame, cria a janela e roda o loop principal do jog
     window = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("DinoEvolution!")
     relogio = pygame.time.Clock()
-    assets = carregar_assets()
+    assets = carregas_assets()
     interface = InterfaceMouse(assets)
     pygame.mixer.music.play(loops=-1)
     rodando = True
@@ -964,5 +966,5 @@ def main():  # Inicializa o Pygame, cria a janela e roda o loop principal do jog
     pygame.quit()
 
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
