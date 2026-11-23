@@ -1,67 +1,111 @@
-Título do projeto; 1 - Dino Evolution
-Nomes dos membros do seu grupo; 2 - Lucas Andrade Machado, Guilherme Tardelli Prieto, Pedro Rinaldi 
-Explicação de como rodar o jogo; 3 - É um jogo na qual tem que ir juntanto os dinos do mesmo nivel para  
-Endereço de um vídeo curto apresentando o seu jogo (você pode colocar o vídeo onde preferir: YouTube, Vimeo, etc. mas o professor precisa ter acesso através do link). Esse vídeo (pode ser alguns poucos segundos) deve mostrar o seu projeto funcionando. - link_youtube: 
-Recomendamos que vocês também incluam no README.md uma descrição do seu projeto, como instalar as dependências (se usar alguma biblioteca adicional, como o PyGame) e como executar o programa. Esses pontos não são obrigatórios, mas são recomendados em qualquer projeto.
-# DinoEvolution
 
-**DinoEvolution** é um jogo 2D de evolução e fusão (*merge game*) desenvolvido em Python com a biblioteca **Pygame**. O jogador gerencia um habitat pré-histórico onde dinossauros produzem ovos que geram moedas. Ao arrastar e combinar dois dinossauros do mesmo nível, eles evoluem para uma nova espécie — passando por 20 estágios evolutivos até desbloquear o **Rei T-Rex** e concluir o jogo.
 
----
+# Dino Evolution
 
-## Integrantes do Grupo
-* [Nome Completo do Integrante 1]
-* [Nome Completo do Integrante 2]
-* [Nome Completo do Integrante 3]
+Dino Evolution é um jogo 2D de evolução e fusão de dinossauros, desenvolvido em Python com a biblioteca Pygame.
 
-## Vídeo de Demonstração
-* [Clique aqui para assistir ao vídeo do DinoEvolution funcionando](COLE_AQUI_O_LINK_DO_VIDEO)
+O jogador combina dinossauros do mesmo nível, coleta ovos para ganhar moedas e investe em novos dinossauros e melhorias. O objetivo é alcançar os 20 níveis de evolução e criar o Rei T-Rex.
 
----
+## Integrantes do grupo
 
-## Como Jogar
-Toda a interação do jogo é feita com o **mouse**:
+- Lucas Andrade Machado
+- Guilherme Tardelli Prieto
+- Pedro Rinaldi
 
-* **Evoluir dinossauros:** Clique, segure e arraste um dinossauro sobre outro do mesmo nível para fundi-los em uma espécie superior.
-* **Coletar moedas:** Clique nos ovos que aparecem pelo gramado antes que desapareçam (cada ovo vale moedas de acordo com o nível do dinossauro que o produziu).
-* **Loja de Dinos:** Compre diretamente dinossauros de níveis já desbloqueados para acelerar suas fusões.
-* **Melhorias:** Invista moedas para diminuir o tempo entre entregas automáticas de caixas e aumentar o nível inicial dos dinossauros que chegam nelas.
-* **Roleta da Evolução:** Gire a roleta a cada 2 minutos para ganhar bônus de moedas baseados na sua renda por segundo ou caixas especiais gratuitas.
-* **Objetivo final:** Combinar dois dinossauros de nível 19 (**Giganotossauro**) para criar o nível 20 (**Rei T-Rex**).
+## Vídeo de demonstração
 
----
+Link do vídeo: 
 
-## Pré-requisitos e Instalação
+## Como jogar
 
-1. Certifique-se de ter o **Python 3** instalado em seu computador.
-2. Instale a biblioteca **Pygame** pelo terminal ou prompt de comando:
+Toda a interação é feita com o mouse. Na tela inicial, clique em **JOGAR** para começar ou em **Como jogar** para consultar as instruções.
 
-```bash
-pip install pygame
+A partida começa com **100 moedas e dois dinossauros de nível 1**.
+
+- **Evoluir dinossauros:** clique, segure e arraste um dinossauro sobre outro do mesmo nível. Ao soltar, os dois se transformam em um dinossauro do nível seguinte.
+- **Coletar moedas:** clique nos ovos que aparecem no campo antes que desapareçam. O valor de cada ovo depende do nível do dinossauro que o produziu.
+- **Comprar dinossauros:** abra o painel **Dinos** e utilize moedas para comprar os níveis disponíveis. Use a roda do mouse ou os botões de navegação para percorrer a loja.
+- **Comprar melhorias:** abra o painel **Melhorias** para reduzir o intervalo entre as entregas automáticas e aumentar o nível dos dinossauros que chegam nas caixas.
+- **Girar a roleta:** abra o painel **Roleta** e clique em **GIRAR** para receber moedas ou uma caixa especial. Após cada giro, há uma espera de **2 minutos**.
+- **Vencer:** combine dois dinossauros de nível 19 para criar o **Rei T-Rex, de nível 20**, e concluir a partida.
+
+## Regras importantes
+
+- O campo comporta até **20 dinossauros e caixas somados**.
+- Os ovos desaparecem após **12 segundos**.
+- A loja começa com os níveis 1 a 4 disponíveis. Novas compras são liberadas conforme a evolução dos dinossauros.
+- O dinossauro de nível 20 só pode ser obtido por fusão.
+- Os painéis de Dinos, Melhorias e Roleta pausam os acontecimentos do campo. A animação e o tempo de espera da roleta continuam sendo atualizados.
+
+## Requisitos
+
+- Python 3.13.
+- Pygame 2.6.1.
+- Os arquivos do projeto e as pastas `imagens/` e `sons/` completos.
+
+Os módulos `random`, `math` e `os` fazem parte do Python e não precisam ser instalados separadamente.
+
+## Instalação e execução
+
+Baixe ou clone o repositório e abra um terminal na pasta que contém os arquivos `funcoes.py`, `assets.py` e `config.py`.
+
+### Windows
+
+Com o Python 3.13 instalado, execute os comandos abaixo, um por vez:
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install pygame==2.6.1
+.\.venv\Scripts\python.exe funcoes.py
 ```
 
-*(Caso utilize Linux ou macOS e o comando acima não funcione, utilize `pip3 install pygame`.)*
+Nas próximas vezes, abra o terminal na pasta do projeto e execute apenas:
 
----
-
-## Como Rodar o Jogo
-
-1. Baixe ou clone este repositório para o seu computador.
-2. Mantenha todos os arquivos (`funcoes.py`, `config.py`, `assets.py`) e as pastas (`imagens/` e `sons/`) juntos no mesmo diretório.
-3. Abra o terminal dentro da pasta principal do projeto e execute:
-
-```bash
-python funcoes.py
+```powershell
+.\.venv\Scripts\python.exe funcoes.py
 ```
 
-*(No Linux ou macOS, caso necessário, execute `python3 funcoes.py`.)*
+### Linux ou macOS
 
----
+Com o Python 3.13 instalado, execute:
 
-## Estrutura do Projeto
+```bash
+python3.13 -m venv .venv
+./.venv/bin/python -m pip install pygame==2.6.1
+./.venv/bin/python funcoes.py
+```
 
-* `funcoes.py`: Arquivo principal que inicializa o Pygame, executa o loop do jogo, gerencia as telas, eventos de mouse, regras da partida e sprites (`Dino`, `Ovo`, `Caixa`).
-* `config.py`: Centraliza as constantes do jogo, dimensões da janela, limites do gramado, coordenadas dos botões, probabilidades da roleta e a tabela com os 20 níveis de dinossauros.
-* `assets.py`: Responsável por carregar e redimensionar as imagens, configurar fontes e áudios e desenhar os elementos gráficos da interface.
-* `imagens/`: Contém o cenário, o meteoro e os sprites dos 20 dinossauros.
-* `sons/`: Contém a trilha sonora e os efeitos sonoros do jogo.
+Nas próximas vezes, execute apenas:
+
+```bash
+./.venv/bin/python funcoes.py
+```
+
+### Execução pelo VS Code
+
+1. Abra a pasta do projeto no VS Code.
+2. Pressione `Ctrl + Shift + P`.
+3. Procure por `Python: Select Interpreter`.
+4. Selecione o Python da pasta `.venv`.
+5. Abra o arquivo `funcoes.py` e clique em **Run Python File**.
+
+## Estrutura do projeto
+
+```text
+DinoEvolution/
+├── funcoes.py
+├── assets.py
+├── config.py
+├── imagens/
+├── sons/
+└── README.md
+```
+
+- **`funcoes.py`:** contém as classes dos dinossauros, ovos e caixas, as regras da partida, os eventos do mouse, as telas e o loop principal.
+- **`assets.py`:** carrega e redimensiona imagens, configura fontes e sons e fornece funções para desenhar os elementos da interface.
+- **`config.py`:** reúne as configurações do jogo, como tamanho da janela, cores, níveis dos dinossauros, tempos, limites e probabilidades da roleta.
+- **`imagens/`:** contém o cenário, o meteoro e as imagens dos 20 níveis de dinossauros.
+- **`sons/`:** contém a trilha sonora e o efeito sonoro utilizado nas ações do jogo.
+
+Mantenha os nomes dos arquivos e a organização das pastas, pois o jogo utiliza essa estrutura para localizar as imagens e os sons.
+
