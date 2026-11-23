@@ -498,7 +498,7 @@ class InterFaceMouse: # gerencia, os cliques arratos dos dinossauros, animaçõe
                 largura = dino.rect.right - dino.rect.left
                 outra_largura = outro.rect.right - outro.rect.left
                 alcance = int((largura + outra_largura) * 0.24) + 13
-                if distancia < alcance ** 2 and distancia < menor:
+                if distancia < alcance and distancia < menor:
                     melhor = outro
                     menor = distancia
         return melhor
@@ -532,7 +532,7 @@ class InterFaceMouse: # gerencia, os cliques arratos dos dinossauros, animaçõe
         coletou = False
         while indice >= 0 and not coletou:
             ovo = ovos[indice]
-            if distancia_dos_pontos(pos[0], pos[1], ovo.rect.centerx, ovo.rect.centery) <= 23 ** 2:
+            if distancia_dos_pontos(pos[0], pos[1], ovo.rect.centerx, ovo.rect.centery) <= 23:
                 self.partida.coletar_ovo(ovo)
                 coletou = True
             indice -= 1

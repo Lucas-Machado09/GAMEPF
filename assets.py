@@ -41,9 +41,9 @@ def carregas_assets():
     assets["pequena"] = pygame.font.SysFont(None,21)
     assets["ovo"] = pygame.font.SysFont(None,37)
 
-    som_encaixe = pygame.mixer.Sound(path.join(SND_DIR, "encaixe.wav"))
-    for nome in ["coletar", "mesclar, comprar", "vitoria", "encaixe"]:
-        assets[nome] = som_encaixe
+    som = pygame.mixer.Sound(path.join(SND_DIR, SOM_ENCAIXE))
+    for nome in ["coletar", "comprar", "vitoria", "encaixe"]:
+        assets[nome] = som
     
     pygame.mixer.music.load(path.join(SND_DIR, MUSICA))
     pygame.mixer.music.set_volume(0.4)
@@ -84,17 +84,18 @@ def placa(tela, area, cor, borda=(70, 42, 22)):
     retangulo(tela, escura, (x + 3, y + altura - 6, largura - 6, 3))
 
 # Escreve texto com sombra na tela.
-def escrever(tela, assets, texto, x, y, fonte="fonte", cor=(255, 250, 232), centro=False):  
+def escrever(tela, assets, texto, x, y, fonte="fonte", cor=(255, 250, 232), centro=False):
     f = assets[fonte]
-    sombra = f.render(str(texto), True, (42, 26, 14))
-    superficie = f.render(str(texto), True, cor)
-    r = superficie.get_rect()
+    principal = f.render(str(texto), True, cor)
+    r = principal.get_rect()
     if centro:
         r.center = (int(x), int(y))
     else:
         r.topleft = (int(x), int(y))
-    tela.blit(sombra, (r.x + 2, r.y + 2))
-    tela.blit(superficie, r)
+    if cor[0] >= 180:
+        sombra = f.render(str(texto), True, (38, 24, 12))
+        tela.blit(sombra, (r.x + 2, r.y + 2))
+    tela.blit(principal, r)
 
 # Desenha uma elipse preenchida usando a tabela CIRCULO.
 def oval(tela, cor, cx, cy, rx, ry):  
