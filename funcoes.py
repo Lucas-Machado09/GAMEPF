@@ -818,3 +818,151 @@ class Partida:
         escrever(tela, self.assets, titulo, 400, 104, "grande", (255, 239, 184), True)
         self.botao(tela, BTN_FECHAR, "X", (191, 73, 49), fonte="pequena")
         escrever(tela, self.assets, detalhe, 400, 135, "pequena", (93, 63, 32), True)
+    def desenhar_loja(self, tela):  # Desenha a janela de compra de dinossauros paginada.
+        p = self.partida
+        self.painel_base(tela, "LOJA DE DINOS", "Use a rodinha do mouse ou as setas abaixo para ver os niveis.")
+        for linha in range(6):
+            nivel = self.scroll + linha + 1
+            y = 145 + linha * 57
+            retangulo(tela, (255, 244, 205), (88, y, 624, 51))
+            imagem = self.assets["dinos"][nivel]["mini"]
+            r = imagem.get_rect()
+            r.center = (127, y + 25)
+            tela.blit(imagem, r)
+            escrever(tela, self.assets, "Nv " + str(nivel) + "  " + self.assets["dinos"][nivel]["nome"], 171, y + 5, "pequena", (77, 48, 24))
+            escrever(tela, self.assets, "Ovo: " + dinheiro(valor_ovo(nivel)) + "  |  Comprados: " + str(p.compradas[nivel - 1]), 171, y + 27, "pequena", (117, 86, 44))
+            preco = preco_dino(nivel, p.compradas)
+            mensagem = dinheiro(preco)
+            ativo = nivel <= p.limite_compra() and p.moedas >= preco
+            if nivel == NIVEL_MAXIMO:
+                mensagem = "So por fusao"
+                ativo = False
+            elif nivel > p.limite_compra():
+                mensagem = "Alcance " + str(nivel + 1)
+            self.botao(tela, self.area_compra(linha), mensagem, ativo=ativo, fonte="pequena")
+        self.botao(tela, BTN_ANTERIOR, "< Voltar", (158, 111, 59), self.scroll > 0, "pequena")
+        self.botao(tela, BTN_PROXIMO, "Proximo >", (158, 111, 59), self.scroll < 14, "pequena")
+        escrever(tela, self.assets, "Niveis " + str(self.scroll + 1) + " a " + str(self.scroll + 6) + " de 20", 400, 520, "pequena", (99, 68, 33), True)
+
+    def desenhar_melhorias(self, tela):  # Desenha o painel de upgrades permanentes.
+        p = self.partida
+        self.painel_base(tela, "MELHORIAS", "Entregas mais rapidas e dinossauros melhores nas caixas.")
+        titulos = ["Entrega rapida", "Qualidade das caixas"]
+        textos = ["Uma caixa a cada " + str(p.intervalo()) + " segundos", "Caixas trazem dino nivel " + str(p.qual)]
+        custos = [p.custo_entrega(), p.custo_qual()]
+        niveis = [p.ent_lvl, p.qual - 1]
+        maximos = [ENT_MAX, QUAL_MAX - 1]
+        for i in range(2):
+            y = 173 + i * 143
+            placa(tela, (89, y, 622, 120), (255, 244, 206))
+            escrever(tela, self.assets, titulos[i], 110, y + 13, "grande", (87, 52, 24))
+            escrever(tela, self.assets, textos[i], 112, y + 53, "pequena", (121, 86, 43))
+            retangulo(tela, (140, 111, 65), (112, y + 89, 367, 12))
+            retangulo(tela, (111, 179, 77), (112, y + 89, int(367 * niveis[i] / maximos[i]), 12))
+            titulo = dinheiro(custos[i])
+            if niveis[i] == maximos[i]:
+                titulo = "MAXIMO"
+            self.botao(tela, (541, y + 31, 156, 43), titulo, ativo=niveis[i] < maximos[i] and p.moedas >= custos[i])
+        escrever(tela, self.assets, "Cada melhoria vale para toda a partida.", 400, 493, "fonte", (110, 75, 33), True)
+
+    def desenhar_roleta(self, tela):  # Desenha a roleta giratoria com as 8 fatias e o botao GIRAR.
+        p = self.partida
+        self.painel_base(tela, "ROLETA DA EVOLUCAO", "Gire para ganhar moedas ou uma caixa especial.")
+        cx, cy, raio = 400, 299, 124
+        pygame.draw.circle(tela, (105, 64, 26), (cx + 3, cy + 6), raio + 10)
+        pygame.draw.circle(tela, (239, 182, 67), (cx, cy), raio + 8)
+        cores = [(207, 92, 65), (223, 175, 68), (101, 161, 87), (87, 135, 182),
+                 (203, 129, 68), (134, 112, 180), (95, 164, 152), (204, 104, 135)]
+        rotulos = ["+30s", "Caixa", "+60s", "Cx +1", "+15s", "Caixa", "+2min", "Cx +2"]
+        for i in range(8):
+            pontos = [(cx, cy)]
+            for j in range(9):
+                px, py = CIRCULO[(i * 8 + j + self.passo_roda) % 64]
+                pontos.append((int(cx + raio * px / 1000), int(cy + raio * py / 1000)))
+            pygame.draw.polygon(tela, cores[i], pontos)
+            px, py = CIRCULO[(i * 8 + 4 + self.passo_roda) % 64]
+            escrever(tela, self.assets, rotulos[i], cx + 82 * px / 1000, cy + 82 * py / 1000, "pequena", centro=True)
+        pygame.draw.circle(tela, (126, 79, 32), (cx, cy), 19)
+        desenhar_moeda(tela, cx, cy, 0.9)
+        pygame.draw.polygon(tela, (93, 49, 24), [(383, 161), (417, 161), (400, 192)])
+        pygame.draw.polygon(tela, (255, 215, 86), [(388, 164), (412, 164), (400, 185)])
+        mensagem = p.resultado
+        if mensagem == "":
+            mensagem = "+Ns = segundos da renda | Caixa = dino gratis"
+        escrever(tela, self.assets, mensagem, 400, 453, "fonte", (89, 59, 27), True)
+        titulo = "GIRAR!"
+        if p.girando:
+            titulo = "Girando..."
+        elif p.roleta_cd > 0:
+            titulo = "Volta em " + str(int((p.roleta_cd + 999) / 1000)) + "s"
+        self.botao(tela, BTN_GIRAR, titulo, (213, 129, 46), not p.girando and p.roleta_cd == 0)
+
+    def desenhar_ajuda(self, tela):  # Desenha a tela de instrucoes de como jogar com o mouse.
+        self.painel_base(tela, "COMO JOGAR", "Tudo funciona com o mouse, como na referencia original.")
+        linhas = ["Segure um dinossauro e arraste para outro do mesmo nivel.",
+                  "Solte em cima dele: os dois viram um dino mais evoluido.",
+                  "Clique nos ovos para ganhar moedas antes que desaparecam.",
+                  "Use Dinos para comprar. Use Melhorias para evoluir as entregas.",
+                  "Gire a roleta a cada 40 segundos para receber um premio.",
+                  "A loja e os paineis pausam o campo. Feche no X para continuar.",
+                  "Objetivo: juntar dois dinos nivel 19 e criar o Rei T-Rex!"]
+        for i in range(len(linhas)):
+            escrever(tela, self.assets, linhas[i], 105, 178 + i * 32, "pequena", (94, 61, 29))
+        desenhar_ovo(tela, 255, 438, 1.3)
+        desenhar_caixa(tela, 545, 434, 0.9)
+        self.botao(tela, (286, 485, 228, 43), "ENTENDI!", (76, 158, 78))
+
+    def desenhar_meteoro(self, tela):  # Desenha o meteoro cruzando a tela e o clarao antes da vitoria.
+        self.desenhar_campo(tela)
+        img = self.assets["meteoro"]
+        r = img.get_rect()
+        r.center = (int(self.meteoro_x), int(self.meteoro_y))
+        tela.blit(img, r)
+        if self.tempo_meteoro >= 1750:
+            retangulo(tela, (255, 248, 215), (0, 0, WIDTH, HEIGHT))
+
+    def desenhar_vitoria(self, tela):  # Desenha a tela final com o Rei T-Rex, tempo, confetes e reinicio.
+        placa(tela, (100, 74, 600, 474), (240, 219, 157))
+        escrever(tela, self.assets, "VITORIA!", 400, 124, "titulo", (117, 68, 23), True)
+        escrever(tela, self.assets, "Voce criou o Rei T-Rex!", 400, 184, "grande", (91, 111, 49), True)
+        imagem = self.assets["dinos"][20]["vitoria"]
+        r = imagem.get_rect()
+        r.center = (400, 337)
+        tela.blit(imagem, r)
+        segundos = int(self.partida.tempo / 1000)
+        escrever(tela, self.assets, "Tempo: " + str(int(segundos / 60)) + " min " + str(segundos % 60) + " s", 400, 455, "fonte", (106, 73, 34), True)
+        self.botao(tela, BTN_NOVO, "Jogar de novo", (80, 157, 76), fonte="grande")
+        cores = [(255, 208, 70), (113, 202, 99), (246, 125, 91), (124, 184, 237)]
+        for confete in self.confetes:
+            retangulo(tela, cores[confete[3]], (int(confete[0]), int(confete[1]), 5, 8))
+
+
+# ==================== LOOP PRINCIPAL ====================
+def main():  # Inicializa o Pygame, cria a janela e roda o loop principal do jogo.
+    pygame.init()
+    pygame.mixer.init()
+    window = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("DinoEvolution!")
+    relogio = pygame.time.Clock()
+    assets = carregar_assets()
+    interface = InterfaceMouse(assets)
+    pygame.mixer.music.play(loops=-1)
+    rodando = True
+    while rodando:
+        dt = relogio.tick(FPS)
+        if dt > 100:
+            dt = 100
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+            else:
+                interface.evento(evento)
+        if rodando:
+            interface.update(dt)
+            interface.desenhar(window)
+            pygame.display.update()
+    pygame.quit()
+
+
+if _name_ == "_main_":
+    main()
