@@ -7,7 +7,7 @@ def monta_info():
     info = {}
     for n in range(1, NIVEL_MAXIMO + 1):
         nome, arquivo , escala = BASE [n - 1]
-        imagem = pygame.image.load(path.join(IMG_DIR, arquivo)).convert()
+        imagem = pygame.image.loud(path.join(IMG_DIR, arquivo)).convert()
         imagem.set_colorkey(0,0,0) # remove o preto do JPEG antes de redimensionar. Tivemos auxilio de IA
         tamanho = imagem.get_rect()
         largura = int(86 * escala)
