@@ -45,7 +45,7 @@ ENTREGA_PASSO = 0.5
 ENTREGA_MIN = 4
 ENT_MAX = 8
 QUAL_MAX = 12
-COOLDOWN_ROLETA = 5
+COOLDOWN_ROLETA = 60
 
 # retangulo do lugar onde os dinos vão andar
 X_MIN = 12 

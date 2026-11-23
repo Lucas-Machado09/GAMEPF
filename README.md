@@ -13,7 +13,7 @@ O jogador combina dinossauros do mesmo nível, coleta ovos para ganhar moedas e 
 
 ## Vídeo de demonstração
 
-Link do vídeo: 
+Link do vídeo: https://youtu.be/8nCeBJQJbW4
 
 ## Como jogar
 
@@ -25,7 +25,7 @@ A partida começa com **100 moedas e dois dinossauros de nível 1**.
 - **Coletar moedas:** clique nos ovos que aparecem no campo antes que desapareçam. O valor de cada ovo depende do nível do dinossauro que o produziu.
 - **Comprar dinossauros:** abra o painel **Dinos** e utilize moedas para comprar os níveis disponíveis. Use a roda do mouse ou os botões de navegação para percorrer a loja.
 - **Comprar melhorias:** abra o painel **Melhorias** para reduzir o intervalo entre as entregas automáticas e aumentar o nível dos dinossauros que chegam nas caixas.
-- **Girar a roleta:** abra o painel **Roleta** e clique em **GIRAR** para receber moedas ou uma caixa especial. Após cada giro, há uma espera de **2 minutos**.
+- **Girar a roleta:** abra o painel **Roleta** e clique em **GIRAR** para receber moedas ou uma caixa especial. Após cada giro, há uma espera de **1 minutos**.
 - **Vencer:** combine dois dinossauros de nível 19 para criar o **Rei T-Rex, de nível 20**, e concluir a partida.
 
 ## Regras importantes
